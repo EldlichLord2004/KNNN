@@ -34,5 +34,42 @@ class SnakeGame:
         #               FONTS
         self.font_style = pygame.font.SysFont("bahnschrift", 25)
         self.score_font = pygame.font.SysFont("freesans", 35)
+        
+    #               MAIN
+    def gameLoop(self):
+        game_over = False
+        game_close = False
 
+        # Position and movement
+        x1 = self.dis_width / 2
+        y1 = self.dis_height / 2
+        x1_change = 0
+        y1_change = 0
+
+        snake_List = []
+        Length_of_snake = 1
+
+        # Food position
+        foodx = self.snake_block * random.randint(0, (self.dis_width / self.snake_block) - 1)
+        foody = self.snake_block * random.randint(0, (self.dis_height / self.snake_block) - 1)
+
+        while not game_over:
+            while game_close:
+                # Display game over message
+                self.dis.fill(self.bg)
+                self.message("You Lost! P-Play Again   |   Q-Quit", self.red)
+                self.thescore(Length_of_snake - 1)
+                pygame.display.update()
+
+                # Event handling for game over
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        game_over = True
+                        game_close = False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_q:
+                            game_over = True
+                            game_close = False
+                        if event.key == pygame.K_p:
+                            self.gameLoop()
 
