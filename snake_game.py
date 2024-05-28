@@ -29,7 +29,7 @@ class SnakeGame:
         # Define snake properties
         self.snake_block = 10 # Size of 1 block
 
-        self.snake_speed = 15 # frame rate
+        self.snake_speed = 5 # frame rate
 
         #               FONTS
         self.font_style = pygame.font.SysFont("bahnschrift", 25)
