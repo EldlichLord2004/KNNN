@@ -61,6 +61,20 @@ class SnakeGame:
                 self.thescore(Length_of_snake - 1)
                 pygame.display.update()
 
+
+        # Event handling for game over
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        game_over = True
+                        game_close = False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_q:
+                            game_over = True
+                            game_close = False
+                        if event.key == pygame.K_p:
+                            self.gameLoop()
+
+
             # Event handling for gameplay
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -76,7 +90,7 @@ class SnakeGame:
                         y1_change = -self.snake_block
                         x1_change = 0
                     elif event.key == pygame.K_DOWN:
-y1_change = self.snake_block
+                        y1_change = self.snake_block
                         x1_change = 0
 
             # Check if game over
@@ -121,3 +135,4 @@ y1_change = self.snake_block
             self.clock.tick(self.snake_speed)
 
         pygame.quit()
+
