@@ -5,7 +5,7 @@ class SnakeGame:
     def __init__(self):
         pygame.init()
 
-        #           COLORS
+        # COLORS
         self.bg = (150, 150, 150)  # Background 
         self.h = (255, 150, 20)  # Head 
         self.body = (0, 200, 255)  # Body 
@@ -14,7 +14,7 @@ class SnakeGame:
         self.red = (213, 50, 80)  # Game over message 
         self.outer = (100, 100, 200)  # Snake outer 
 
-        #         SIZE DISPLAY
+        # SIZE DISPLAY
         self.dis_width = 600
         self.dis_hwidth = 300
         self.dis_height = 400
@@ -31,14 +31,18 @@ class SnakeGame:
 
         self.snake_speed = 5 # frame rate
 
-        #               FONTS
+        # FONTS
         self.font_style = pygame.font.SysFont("bahnschrift", 25)
         self.score_font = pygame.font.SysFont("freesans", 35)
         
-    #               MAIN
+    # MAIN
     def gameLoop(self):
         game_over = False
         game_close = False
+
+        # Game over image
+        game_over_img = pygame.image.load("game_over_msg.png").convert_alpha()
+        game_over_img = pygame.transform.scale(game_over_img, (self.dis_width, self.dis_height))
 
         # Position and movement
         x1 = self.dis_width / 2
@@ -50,19 +54,19 @@ class SnakeGame:
         Length_of_snake = 1
 
         # Food position
-        foodx = self.snake_block * random.randint(0, (self.dis_width / self.snake_block) - 1)
-        foody = self.snake_block * random.randint(0, (self.dis_height / self.snake_block) - 1)
+        foodx = self.snake_block * random.randint(0, int(self.dis_width / self.snake_block) - 1)
+        foody = self.snake_block * random.randint(0, int(self.dis_height / self.snake_block) - 1)
 
         while not game_over:
             while game_close:
                 # Display game over message
                 self.dis.fill(self.bg)
+                self.dis.blit(game_over_img, (0, 0))
                 self.message("You Lost! P-Play Again   |   Q-Quit", self.red)
                 self.thescore(Length_of_snake - 1)
                 pygame.display.update()
 
-
-        # Event handling for game over
+                # Event handling for game over
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         game_over = True
@@ -73,7 +77,6 @@ class SnakeGame:
                             game_close = False
                         if event.key == pygame.K_p:
                             self.gameLoop()
-
 
             # Event handling for gameplay
             for event in pygame.event.get():
@@ -128,11 +131,29 @@ class SnakeGame:
 
             # Snake eats the food
             if x1 == foodx and y1 == foody:
-                foodx = self.snake_block * random.randint(0, (self.dis_width / self.snake_block) - 1)
-                foody = self.snake_block * random.randint(0, (self.dis_height / self.snake_block) - 1)
+                # Tăng chiều dài của con rắn
                 Length_of_snake += 1
+                # Tạo một vị trí mới cho thức ăn
+                foodx = self.snake_block * random.randint(0, int(self.dis_width / self.snake_block) - 1)
+                foody = self.snake_block * random.randint(0, int(self.dis_height / self.snake_block) - 1)
             # set frame rate
             self.clock.tick(self.snake_speed)
 
         pygame.quit()
 
+    def message(self, msg, color):
+        mesg = self.font_style.render(msg, True, color)
+        self.dis.blit(mesg, [self.dis_hwidth - 100, self.dis_hheight])
+
+    def our_snake(self, block, snake_list):
+        for x in snake_list:
+            pygame.draw.rect(self.dis, self.outer, [x[0], x[1], block, block])
+            pygame.draw.rect(self.dis, self.body, [x[0] + 1, x[1] + 1, block - 2, block - 2])
+
+    def thescore(self, score):
+        value = self.score_font.render("Your Score: " + str(score), True, self.sc)
+        self.dis.blit(value, [0, 0])
+
+if __name__ == "__main__":
+    game = SnakeGame()
+    game.gameLoop()
