@@ -151,7 +151,7 @@ class SnakeGame:
             pygame.draw.rect(self.dis, self.body, [x[0] + 1, x[1] + 1, block - 2, block - 2])
 
     def thescore(self, score):
-        value = self.score_font.render("Your Score: " + str(score), True, self.sc)
+        value = self.score_font.render("Score: " + str(score), True, self.sc)
         self.dis.blit(value, [0, 0])
 
 if __name__ == "__main__":
