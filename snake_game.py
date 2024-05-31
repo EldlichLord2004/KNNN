@@ -143,7 +143,7 @@ class SnakeGame:
 
     def message(self, msg, color):
         mesg = self.font_style.render(msg, True, color)
-        self.dis.blit(mesg, [self.dis_hwidth - 100, self.dis_hheight])
+        self.dis.blit(mesg, [self.dis_hwidth - 150, self.dis_hheight + 170])
 
     def our_snake(self, block, snake_list):
         for x in snake_list:
