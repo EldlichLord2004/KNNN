@@ -31,9 +31,26 @@ class SnakeGame:
 
         self.snake_speed = 5 # frame rate
 
+
+        # Load sounds
+        try:
+            self.ingame_sound = pygame.mixer.Sound('ingame_sound.wav')
+            self.eating_sound = pygame.mixer.Sound('eating.wav')
+            self.game_over_sound = pygame.mixer.Sound('gameOver_sound.wav')
+        except pygame.error as e:
+            print(f"Failed to load sound files: {e}")
+            raise SystemExit(e)
+
         # FONTS
         self.font_style = pygame.font.SysFont("bahnschrift", 25)
         self.score_font = pygame.font.SysFont("freesans", 35)
+
+    # Display the score
+    def thescore(self, score):
+        value = self.score_font.render("Your Score: " + str(score), True, self.sc)
+        self.dis.blit(value, [0, 0])
+
+
         
     # MAIN
     def gameLoop(self):
@@ -57,9 +74,18 @@ class SnakeGame:
         foodx = self.snake_block * random.randint(0, int(self.dis_width / self.snake_block) - 1)
         foody = self.snake_block * random.randint(0, int(self.dis_height / self.snake_block) - 1)
 
+
+        # Play ingame sound
+        self.ingame_sound.play(-1)  # Loop indefinitely
+
+
         while not game_over:
             while game_close:
-                # Display game over message
+                # Stop ingame sound and play game over sound
+                self.ingame_sound.stop()
+                self.game_over_sound.play()
+
+                # Display game over message and image
                 self.dis.fill(self.bg)
                 self.dis.blit(game_over_img, (0, 0))
                 self.message("You Lost! P-Play Again   |   Q-Quit", self.red)
@@ -118,7 +144,7 @@ class SnakeGame:
             if len(snake_List) > Length_of_snake:
                 del snake_List[0]
 
-            # Check hits itself
+            # Check if snake hits itself
             for x in snake_List[:-1]:
                 if x == snake_Head:
                     game_close = True
@@ -131,28 +157,35 @@ class SnakeGame:
 
             # Snake eats the food
             if x1 == foodx and y1 == foody:
-                # Tăng chiều dài của con rắn
+
+                # Play eating sound
+                self.eating_sound.play()
+                # Increase snake length
                 Length_of_snake += 1
-                # Tạo một vị trí mới cho thức ăn
+                # Generate new position for food
                 foodx = self.snake_block * random.randint(0, int(self.dis_width / self.snake_block) - 1)
                 foody = self.snake_block * random.randint(0, int(self.dis_height / self.snake_block) - 1)
-            # set frame rate
+
+            # Set frame rate
+
             self.clock.tick(self.snake_speed)
 
         pygame.quit()
 
+
+    # Display a message on the screen
     def message(self, msg, color):
         mesg = self.font_style.render(msg, True, color)
         self.dis.blit(mesg, [self.dis_hwidth - 150, self.dis_hheight + 170])
+
+
+    # Draw the snake
 
     def our_snake(self, block, snake_list):
         for x in snake_list:
             pygame.draw.rect(self.dis, self.outer, [x[0], x[1], block, block])
             pygame.draw.rect(self.dis, self.body, [x[0] + 1, x[1] + 1, block - 2, block - 2])
 
-    def thescore(self, score):
-        value = self.score_font.render("Score: " + str(score), True, self.sc)
-        self.dis.blit(value, [0, 0])
 
 if __name__ == "__main__":
     game = SnakeGame()
