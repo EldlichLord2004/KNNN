@@ -52,16 +52,9 @@ class SnakeGame:
 
     # Constants
     HALF = 2
-    LOOP_INDEFINITELY = -1
     START_LENGTH = 1
 
-    # Function for bgm
-    
-    def play_sound(sound, loop=LOOP_INDEFINITELY):
-        sound.play(loop)
-        
-    def stop_sound(sound):
-        sound.stop()
+
         
     # MAIN
     def gameLoop(self):
@@ -177,6 +170,13 @@ class SnakeGame:
             # Set frame rate
 
             self.clock.tick(self.snake_speed)
+            # Function for bgm
+            LOOP_INDEFINITELY = -1
+            def play_sound(sound, loop=LOOP_INDEFINITELY):
+                sound.play(loop)
+                
+            def stop_sound(sound):
+                sound.stop()
             
             # ingame sound
             while not game_over:
