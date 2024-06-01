@@ -50,7 +50,18 @@ class SnakeGame:
         value = self.score_font.render("Your Score: " + str(score), True, self.sc)
         self.dis.blit(value, [0, 0])
 
+    # Constants
+    HALF = 2
+    LOOP_INDEFINITELY = -1
+    START_LENGTH = 1
 
+    # Function for bgm
+    
+    def play_sound(sound, loop=LOOP_INDEFINITELY):
+        sound.play(loop)
+        
+    def stop_sound(sound):
+        sound.stop()
         
     # MAIN
     def gameLoop(self):
@@ -74,9 +85,6 @@ class SnakeGame:
         foodx = self.snake_block * random.randint(0, int(self.dis_width / self.snake_block) - 1)
         foody = self.snake_block * random.randint(0, int(self.dis_height / self.snake_block) - 1)
 
-
-        # Play ingame sound
-        self.ingame_sound.play(-1)  # Loop indefinitely
 
 
         while not game_over:
@@ -169,6 +177,14 @@ class SnakeGame:
             # Set frame rate
 
             self.clock.tick(self.snake_speed)
+            
+            # ingame sound
+            while not game_over:
+                while game_close:
+                    stop_sound(self.ingame_sound)
+                    play_sound(self.game_over_sound)
+                    self.dis.fill(self.bg)
+                    self.dis.blit(game_over_img, (0, 0))
 
         pygame.quit()
 
