@@ -76,6 +76,7 @@ class SnakeGame:
         foodx = self.snake_block * random.randint(0, self.dis_width / self.snake_block - 1)
         foody = self.snake_block * random.randint(0, self.dis_height / self.snake_block - 1)
 
+
         self.play_sound(self.ingame_sound)
 
         while not game_over:
@@ -147,6 +148,21 @@ class SnakeGame:
                 foody = self.snake_block * random.randint(0, self.dis_height / self.snake_block - 1)
 
             self.clock.tick(self.snake_speed)
+            # Function for bgm
+            LOOP_INDEFINITELY = -1
+            def play_sound(sound, loop=LOOP_INDEFINITELY):
+                sound.play(loop)
+                
+            def stop_sound(sound):
+                sound.stop()
+            
+            # ingame sound
+            while not game_over:
+                while game_close:
+                    stop_sound(self.ingame_sound)
+                    play_sound(self.game_over_sound)
+                    self.dis.fill(self.bg)
+                    self.dis.blit(game_over_img, (0, 0))
 
         pygame.quit()
 
